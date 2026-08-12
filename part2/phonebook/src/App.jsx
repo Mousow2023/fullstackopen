@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import axios from 'axios'
+import personServices from './services/persons'
 
 const Filter = ({ filter, onChange }) =>
   <div>
@@ -21,18 +22,23 @@ const PersonForm = ({
     </div>
   </form>
 
-const PersonsToShow = ({ personsToShow }) => (
+const PersonsToShow = ({ personsToShow, onDelete }) => (
   <>
     {
       personsToShow.map(person => 
-        <Person key={person.id} person={person} />
+        <Person
+          key={person.id}
+          person={person} 
+          onDelete={onDelete}
+        />
       )
     }
   </>
 )
 
-const Person = ({ person }) =>
-  <p>{person.name} {person.number}</p>
+const Person = ({ person, onDelete }) =>
+  <p>{person.name} {person.number}
+  <button onClick={() => onDelete(person)} >delete</button></p>
 
 const App = () => {
   const [persons, setPersons] = useState([])
@@ -40,11 +46,12 @@ const App = () => {
   const [newNumber, setNumber] = useState('')
   const [filter, setFilter] = useState('')
 
+  // Getting persons from server
   useEffect(() => {
-    axios
-      .get('http://localhost:3001/persons')
-      .then(response => {
-        setPersons(response.data)
+    personServices
+      .getAll()
+      .then(initialPersons => {
+        setPersons(initialPersons)
       })
   }, [])
 
@@ -56,16 +63,18 @@ const App = () => {
       return      
     }
 
-    axios
-      .post(`http://localhost:3001/persons`, {
-        name: newName,
-        number: newNumber
+    // Saving persons to server
+    const personObj = {
+      name: newName,
+      number: newNumber
+    }
+    personServices
+      .create(personObj)
+      .then(person => {
+        setPersons(persons.concat(person))
+        setNewName('')
+        setNumber('')
       })
-      .then(response => {
-        setPersons(persons.concat(response.data))
-      })
-    setNewName('')
-    setNumber('')
   }
 
   const personsToShow = filter === ''
@@ -73,6 +82,14 @@ const App = () => {
     : persons.filter(
         person => person.name.toLowerCase().includes(filter.toLowerCase())
       )
+
+  const handleDelete = person => {
+    personServices
+      .deletePerson(person)
+      .then(() => {
+        setPersons(persons.filter(p => p.id !== person.id))
+      })
+  }
 
   return (
     <div>
@@ -87,7 +104,7 @@ const App = () => {
       />
 
       <h2>Numbers</h2>
-      <PersonsToShow personsToShow={personsToShow} />
+      <PersonsToShow personsToShow={personsToShow} onDelete={handleDelete} />
     </div>
   )
 }

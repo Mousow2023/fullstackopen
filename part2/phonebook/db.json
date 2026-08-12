@@ -1,39 +1,19 @@
 {
   "persons": [
     {
-      "name": "Arto Hellas",
-      "number": "040-123456",
-      "id": "1"
-    },
-    {
+      "id": "2",
       "name": "Ada Lovelace",
-      "number": "39-44-5323523",
-      "id": "2"
+      "number": "39-44-5323523"
     },
     {
+      "id": "3",
       "name": "Dan Abramov",
-      "number": "12-43-234345",
-      "id": "3"
+      "number": "12-43-234345"
     },
     {
-      "name": "Mary Poppendieck",
-      "number": "39-23-6423122",
-      "id": "4"
-    },
-    {
-      "name": "Moustapha SOW",
-      "number": "771234567",
-      "id": "5"
-    },
-    {
-      "name": "Pape Demba",
-      "number": "77147258369",
-      "id": "VaCvGZC4NJA"
-    },
-    {
-      "name": "Ndeye Amie Tall",
-      "number": "456789123",
-      "id": "YNkIBPQgzLA"
+      "name": "Moustapha",
+      "number": "8542126",
+      "id": "fDbSeU7Ce64"
     }
   ],
   "$schema": "./node_modules/json-server/schema.json"
