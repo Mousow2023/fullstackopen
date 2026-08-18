@@ -78,6 +78,14 @@ const App = () => {
               setNotificationClass(null)
             }, 3000)
           })
+          .catch(error => {
+            setErrorMessage(`${changedName.name} was already removed from server`)
+            setNotificationClass('error')
+          })
+          setTimeout(() => {
+            setErrorMessage(null)
+            setNotificationClass(null)
+          }, 3000);
       }
       return
     }
