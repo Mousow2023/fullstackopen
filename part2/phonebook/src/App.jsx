@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import axios from 'axios'
 import personServices from './services/persons'
+import Notification from './components/Notification'
 
 const Filter = ({ filter, onChange }) =>
   <div>
@@ -45,6 +46,8 @@ const App = () => {
   const [newName, setNewName] = useState('')
   const [newNumber, setNumber] = useState('')
   const [filter, setFilter] = useState('')
+  const [errorMessage, setErrorMessage] = useState(null)
+  const [notificationClass, setNotificationClass] = useState('')
 
   // Getting persons from server
   useEffect(() => {
@@ -68,6 +71,12 @@ const App = () => {
             setPersons(persons.map(p => p.id === returnedPerson.id ? returnedPerson : p))
             setNewName('')
             setNumber('')
+            setErrorMessage(`Updated ${returnedPerson.name}`)
+            setNotificationClass('success')
+            setTimeout(() => {
+              setErrorMessage(null)
+              setNotificationClass(null)
+            }, 3000)
           })
       }
       return
@@ -84,6 +93,12 @@ const App = () => {
         setPersons(persons.concat(person))
         setNewName('')
         setNumber('')
+        setErrorMessage(`Added ${person.name}`)
+        setNotificationClass('success')
+        setTimeout(() => {
+          setErrorMessage(null)
+          setNotificationClass(null)
+        }, 3000)
       })
   }
 
@@ -99,6 +114,12 @@ const App = () => {
         .deletePerson(person)
         .then(() => {
           setPersons(persons.filter(p => p.id !== person.id))
+          setErrorMessage(`Deleted ${person.name}`)
+          setNotificationClass('success')
+          setTimeout(() => {
+            setErrorMessage(null)
+            setNotificationClass(null)
+          }, 3000)
         })
     }
   }
@@ -106,6 +127,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+      <Notification message={errorMessage} className={notificationClass} />
       <Filter filter={filter} onChange={e => setFilter(e.target.value)} />
 
       <h2>add a new</h2>
