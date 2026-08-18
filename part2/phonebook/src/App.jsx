@@ -57,10 +57,20 @@ const App = () => {
 
   const handleSubmission = (e) => {
     e.preventDefault()
-    const nameExists = persons.some(person => person.name === newName)
-    if (nameExists) {
-      alert(`${newName} is already added to phonebook`)
-      return      
+    const existedName = persons.find(person => person.name.toLowerCase() === newName.toLowerCase())
+    if (existedName) {
+      const changedName = {...existedName, number: newNumber}
+      if(window.confirm(`${newName} is already added to phonebook, replace the old number with new one?`)) {
+        personServices
+          .update(existedName.id, changedName)
+          .then(returnedPerson => {
+            // Update the state and clear the inputs
+            setPersons(persons.map(p => p.id === returnedPerson.id ? returnedPerson : p))
+            setNewName('')
+            setNumber('')
+          })
+      }
+      return
     }
 
     // Saving persons to server
@@ -84,11 +94,13 @@ const App = () => {
       )
 
   const handleDelete = person => {
-    personServices
-      .deletePerson(person)
-      .then(() => {
-        setPersons(persons.filter(p => p.id !== person.id))
-      })
+    if (window.confirm('Are you sure you want to delete this person?')) {
+      personServices
+        .deletePerson(person)
+        .then(() => {
+          setPersons(persons.filter(p => p.id !== person.id))
+        })
+    }
   }
 
   return (

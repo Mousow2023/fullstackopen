@@ -11,9 +11,14 @@
       "number": "12-43-234345"
     },
     {
+      "name": "Talla Niang",
+      "number": "1323456798",
+      "id": "cXGYDXLzraI"
+    },
+    {
       "name": "Moustapha",
-      "number": "8542126",
-      "id": "fDbSeU7Ce64"
+      "number": "39-44-5323523",
+      "id": "U6PZ0ZYz5qA"
     }
   ],
   "$schema": "./node_modules/json-server/schema.json"
